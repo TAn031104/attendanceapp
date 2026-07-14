@@ -47,8 +47,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) {
-        final screenWidth = MediaQuery.of(dialogContext).size.width;
-        final dialogWidth = screenWidth > 450 ? 400.0 : screenWidth * 0.9;
+        const dialogWidth = 320.0;
         return StatefulBuilder(
           builder: (dialogContext, setDialogState) {
             return Dialog(
@@ -155,6 +154,9 @@ class _SessionListScreenState extends State<SessionListScreen> {
                             ),
                             const SizedBox(width: 8),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(100, 40),
+                              ),
                               onPressed: () async {
                                 if (!selectedDays.values.any((e) => e)) {
                                   ScaffoldMessenger.of(dialogContext).showSnackBar(
@@ -246,8 +248,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) {
-        final screenWidth = MediaQuery.of(dialogContext).size.width;
-        final dialogWidth = screenWidth > 450 ? 400.0 : screenWidth * 0.9;
+        const dialogWidth = 320.0;
         return StatefulBuilder(
           builder: (dialogContext, setDialogState) {
             return Dialog(
@@ -294,6 +295,9 @@ class _SessionListScreenState extends State<SessionListScreen> {
                               'Ngày: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
                             ),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(100, 40),
+                              ),
                               onPressed: () async {
                                 final date = await showDatePicker(
                                   context: dialogContext,
@@ -319,6 +323,9 @@ class _SessionListScreenState extends State<SessionListScreen> {
                             ),
                             const SizedBox(width: 8),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(100, 40),
+                              ),
                               onPressed: () async {
                                 final buoi = BuoiHoc(
                                   maBuoiHoc: maBuoiController.text.trim(),
@@ -377,8 +384,11 @@ class _SessionListScreenState extends State<SessionListScreen> {
               onPressed: () => Navigator.pop(context),
               child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                minimumSize: const Size(100, 40),
+              ),
               onPressed: () async {
                 try {
                   await _firebase.xoaBuoiHoc(session.maBuoiHoc);

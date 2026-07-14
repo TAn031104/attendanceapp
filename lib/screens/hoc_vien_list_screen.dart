@@ -62,8 +62,7 @@ class _HocVienListScreenState extends State<HocVienListScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) {
-        final screenWidth = MediaQuery.of(dialogContext).size.width;
-        final dialogWidth = screenWidth > 450 ? 400.0 : screenWidth * 0.9;
+        const dialogWidth = 320.0;
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: SizedBox(
@@ -105,6 +104,9 @@ class _HocVienListScreenState extends State<HocVienListScreen> {
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(100, 40),
+                          ),
                           onPressed: () async {
                             if (maHVController.text.isEmpty ||
                                 nameController.text.isEmpty ||
@@ -167,7 +169,10 @@ class _HocVienListScreenState extends State<HocVienListScreen> {
               child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                minimumSize: const Size(100, 40),
+              ),
               onPressed: () async {
                 try {
                   await _firebase.xoaHocVien(hv.maHocVien);

@@ -52,8 +52,7 @@ class _ClassListScreenState extends State<ClassListScreen> {
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) {
-        final screenWidth = MediaQuery.of(dialogContext).size.width;
-        final dialogWidth = screenWidth > 450 ? 400.0 : screenWidth * 0.9;
+        const dialogWidth = 320.0;
         return StatefulBuilder(
           builder: (dialogContext, setStateDialog) {
             return Dialog(
@@ -113,6 +112,9 @@ class _ClassListScreenState extends State<ClassListScreen> {
                             ),
                             const SizedBox(width: 8),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(100, 40),
+                              ),
                               onPressed: isSaving
                                   ? null
                                   : () async {
@@ -190,7 +192,10 @@ class _ClassListScreenState extends State<ClassListScreen> {
               child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                minimumSize: const Size(100, 40),
+              ),
               onPressed: () async {
                 try {
                   await _firebase.xoaLopHoc(lopHoc.maLop);
