@@ -64,75 +64,89 @@ class _HocVienListScreenState extends State<HocVienListScreen> {
       builder: (dialogContext) {
         final screenWidth = MediaQuery.of(dialogContext).size.width;
         final dialogWidth = screenWidth > 450 ? 400.0 : screenWidth * 0.9;
-        return AlertDialog(
-          title: Text(isEdit ? 'Chỉnh sửa học viên' : 'Thêm học viên mới'),
-          content: SizedBox(
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: SizedBox(
             width: dialogWidth,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: maHVController,
-                    enabled: !isEdit,
-                    decoration: const InputDecoration(labelText: 'Mã HV'),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: nameController,
-                    decoration: const InputDecoration(labelText: 'Họ và tên'),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                  ),
-                ],
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      isEdit ? 'Chỉnh sửa học viên' : 'Thêm học viên mới',
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: maHVController,
+                      enabled: !isEdit,
+                      decoration: const InputDecoration(labelText: 'Mã HV'),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(labelText: 'Họ và tên'),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: emailController,
+                      decoration: const InputDecoration(labelText: 'Email'),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(dialogContext),
+                          child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (maHVController.text.isEmpty ||
+                                nameController.text.isEmpty ||
+                                emailController.text.isEmpty) {
+                              return;
+                            }
+                            final hv = HocVien(
+                              maHocVien: maHVController.text.trim(),
+                              hoTen: nameController.text.trim(),
+                              email: emailController.text.trim(),
+                              maLop: widget.maLop,
+                              uidChuLop: _firebase.currentUid ?? '',
+                              ngayThamGia: hocVien?.ngayThamGia ?? DateTime.now(),
+                              trangThai: hocVien?.trangThai ?? 'Đang học',
+                            );
+                            try {
+                              if (isEdit) {
+                                await _firebase.capNhatHocVien(hv);
+                              } else {
+                                await _firebase.themHocVien(hv);
+                              }
+                              if (dialogContext.mounted) Navigator.pop(dialogContext);
+                            } catch (e) {
+                              if (dialogContext.mounted) {
+                                ScaffoldMessenger.of(dialogContext).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Lỗi lưu học viên: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: Text(isEdit ? 'Cập nhật' : 'Thêm mới'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (maHVController.text.isEmpty ||
-                    nameController.text.isEmpty ||
-                    emailController.text.isEmpty) {
-                  return;
-                }
-                final hv = HocVien(
-                  maHocVien: maHVController.text.trim(),
-                  hoTen: nameController.text.trim(),
-                  email: emailController.text.trim(),
-                  maLop: widget.maLop,
-                  uidChuLop: _firebase.currentUid ?? '',
-                  ngayThamGia: hocVien?.ngayThamGia ?? DateTime.now(),
-                  trangThai: hocVien?.trangThai ?? 'Đang học',
-                );
-                try {
-                  if (isEdit) {
-                    await _firebase.capNhatHocVien(hv);
-                  } else {
-                    await _firebase.themHocVien(hv);
-                  }
-                  if (dialogContext.mounted) Navigator.pop(dialogContext);
-                } catch (e) {
-                  if (dialogContext.mounted) {
-                    ScaffoldMessenger.of(dialogContext).showSnackBar(
-                      SnackBar(
-                        content: Text('Lỗi lưu học viên: $e'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                }
-              },
-              child: Text(isEdit ? 'Cập nhật' : 'Thêm mới'),
-            ),
-          ],
         );
       },
     );

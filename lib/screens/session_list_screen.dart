@@ -51,164 +51,178 @@ class _SessionListScreenState extends State<SessionListScreen> {
         final dialogWidth = screenWidth > 450 ? 400.0 : screenWidth * 0.9;
         return StatefulBuilder(
           builder: (dialogContext, setDialogState) {
-            return AlertDialog(
-              title: const Text('Tạo lịch học tự động'),
-              content: SizedBox(
+            return Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: SizedBox(
                 width: dialogWidth,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: gioBatDauController,
-                        decoration: const InputDecoration(labelText: 'Giờ bắt đầu'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: gioKetThucController,
-                        decoration: const InputDecoration(labelText: 'Giờ kết thúc'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: diaDiemController,
-                        decoration: const InputDecoration(labelText: 'Địa điểm (áp dụng chung)'),
-                      ),
-                      const SizedBox(height: 16),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Thời gian áp dụng:', style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Từ: '),
-                          TextButton(
-                            style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                            onPressed: () async {
-                              final date = await showDatePicker(
-                                context: dialogContext,
-                                initialDate: startDate,
-                                firstDate: DateTime(2020),
-                                lastDate: DateTime(2030),
-                              );
-                              if (date != null) setDialogState(() => startDate = date);
-                            },
-                            child: Text('${startDate.day}/${startDate.month}/${startDate.year}'),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Đến: '),
-                          TextButton(
-                            style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                            onPressed: () async {
-                              final date = await showDatePicker(
-                                context: dialogContext,
-                                initialDate: endDate,
-                                firstDate: DateTime(2020),
-                                lastDate: DateTime(2030),
-                              );
-                              if (date != null) setDialogState(() => endDate = date);
-                            },
-                            child: Text('${endDate.day}/${endDate.month}/${endDate.year}'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Lặp lại vào các ngày:', style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        children: selectedDays.keys.map((day) {
-                          return FilterChip(
-                            label: Text(dayNames[day]!, style: const TextStyle(fontSize: 12)),
-                            selected: selectedDays[day]!,
-                            onSelected: (bool selected) {
-                              setDialogState(() {
-                                selectedDays[day] = selected;
-                              });
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ],
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'Tạo lịch học tự động',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: gioBatDauController,
+                          decoration: const InputDecoration(labelText: 'Giờ bắt đầu'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: gioKetThucController,
+                          decoration: const InputDecoration(labelText: 'Giờ kết thúc'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: diaDiemController,
+                          decoration: const InputDecoration(labelText: 'Địa điểm (áp dụng chung)'),
+                        ),
+                        const SizedBox(height: 16),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Thời gian áp dụng:', style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Từ: '),
+                            TextButton(
+                              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                              onPressed: () async {
+                                final date = await showDatePicker(
+                                  context: dialogContext,
+                                  initialDate: startDate,
+                                  firstDate: DateTime(2020),
+                                  lastDate: DateTime(2030),
+                                );
+                                if (date != null) setDialogState(() => startDate = date);
+                              },
+                              child: Text('${startDate.day}/${startDate.month}/${startDate.year}'),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Đến: '),
+                            TextButton(
+                              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                              onPressed: () async {
+                                final date = await showDatePicker(
+                                  context: dialogContext,
+                                  initialDate: endDate,
+                                  firstDate: DateTime(2020),
+                                  lastDate: DateTime(2030),
+                                );
+                                if (date != null) setDialogState(() => endDate = date);
+                              },
+                              child: Text('${endDate.day}/${endDate.month}/${endDate.year}'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Lặp lại vào các ngày:', style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          children: selectedDays.keys.map((day) {
+                            return FilterChip(
+                              label: Text(dayNames[day]!, style: const TextStyle(fontSize: 12)),
+                              selected: selectedDays[day]!,
+                              onSelected: (bool selected) {
+                                setDialogState(() {
+                                  selectedDays[day] = selected;
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(dialogContext),
+                              child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (!selectedDays.values.any((e) => e)) {
+                                  ScaffoldMessenger.of(dialogContext).showSnackBar(
+                                    const SnackBar(content: Text('Vui lòng chọn ít nhất 1 ngày trong tuần!')),
+                                  );
+                                  return;
+                                }
+                                if (startDate.isAfter(endDate)) {
+                                  ScaffoldMessenger.of(dialogContext).showSnackBar(
+                                    const SnackBar(content: Text('Ngày kết thúc phải sau ngày bắt đầu!')),
+                                  );
+                                  return;
+                                }
+
+                                List<BuoiHoc> dsBuoi = [];
+                                DateTime current = DateTime(startDate.year, startDate.month, startDate.day);
+                                DateTime end = DateTime(endDate.year, endDate.month, endDate.day);
+                                
+                                while (current.isBefore(end) || current.isAtSameMomentAs(end)) {
+                                  if (selectedDays[current.weekday] == true) {
+                                    final buoi = BuoiHoc(
+                                      maBuoiHoc: '${widget.maLop}_B${current.millisecondsSinceEpoch}',
+                                      maLop: widget.maLop,
+                                      uidChuLop: _firebase.currentUid ?? '',
+                                      ngayHoc: current,
+                                      gioBatDau: gioBatDauController.text.trim(),
+                                      gioKetThuc: gioKetThucController.text.trim(),
+                                      diaDiem: diaDiemController.text.trim(),
+                                      viTriLop: _defaultLocation,
+                                      trangThai: 'Sắp diễn ra',
+                                    );
+                                    dsBuoi.add(buoi);
+                                  }
+                                  current = current.add(const Duration(days: 1));
+                                }
+
+                                if (dsBuoi.isEmpty) {
+                                  ScaffoldMessenger.of(dialogContext).showSnackBar(
+                                    const SnackBar(content: Text('Không có ngày nào thỏa mãn.')),
+                                  );
+                                  return;
+                                }
+
+                                try {
+                                  await _firebase.themNhieuBuoiHoc(dsBuoi);
+                                  if (dialogContext.mounted) {
+                                    Navigator.pop(dialogContext);
+                                    ScaffoldMessenger.of(dialogContext).showSnackBar(
+                                      SnackBar(content: Text('Đã tạo ${dsBuoi.length} buổi học!'), backgroundColor: Colors.green),
+                                    );
+                                  }
+                                } catch (e) {
+                                  if (dialogContext.mounted) {
+                                    ScaffoldMessenger.of(dialogContext).showSnackBar(
+                                      SnackBar(content: Text('Lỗi tạo lịch: $e'), backgroundColor: Colors.red),
+                                    );
+                                  }
+                                }
+                              },
+                              child: const Text('Tạo lịch'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (!selectedDays.values.any((e) => e)) {
-                      ScaffoldMessenger.of(dialogContext).showSnackBar(
-                        const SnackBar(content: Text('Vui lòng chọn ít nhất 1 ngày trong tuần!')),
-                      );
-                      return;
-                    }
-                    if (startDate.isAfter(endDate)) {
-                      ScaffoldMessenger.of(dialogContext).showSnackBar(
-                        const SnackBar(content: Text('Ngày kết thúc phải sau ngày bắt đầu!')),
-                      );
-                      return;
-                    }
-
-                    List<BuoiHoc> dsBuoi = [];
-                    DateTime current = DateTime(startDate.year, startDate.month, startDate.day);
-                    DateTime end = DateTime(endDate.year, endDate.month, endDate.day);
-                    
-                    while (current.isBefore(end) || current.isAtSameMomentAs(end)) {
-                      if (selectedDays[current.weekday] == true) {
-                        final buoi = BuoiHoc(
-                          maBuoiHoc: '${widget.maLop}_B${current.millisecondsSinceEpoch}',
-                          maLop: widget.maLop,
-                          uidChuLop: _firebase.currentUid ?? '',
-                          ngayHoc: current,
-                          gioBatDau: gioBatDauController.text.trim(),
-                          gioKetThuc: gioKetThucController.text.trim(),
-                          diaDiem: diaDiemController.text.trim(),
-                          viTriLop: _defaultLocation,
-                          trangThai: 'Sắp diễn ra',
-                        );
-                        dsBuoi.add(buoi);
-                      }
-                      current = current.add(const Duration(days: 1));
-                    }
-
-                    if (dsBuoi.isEmpty) {
-                      ScaffoldMessenger.of(dialogContext).showSnackBar(
-                        const SnackBar(content: Text('Không có ngày nào thỏa mãn.')),
-                      );
-                      return;
-                    }
-
-                    try {
-                      await _firebase.themNhieuBuoiHoc(dsBuoi);
-                      if (dialogContext.mounted) {
-                        Navigator.pop(dialogContext);
-                        ScaffoldMessenger.of(dialogContext).showSnackBar(
-                          SnackBar(content: Text('Đã tạo ${dsBuoi.length} buổi học!'), backgroundColor: Colors.green),
-                        );
-                      }
-                    } catch (e) {
-                      if (dialogContext.mounted) {
-                        ScaffoldMessenger.of(dialogContext).showSnackBar(
-                          SnackBar(content: Text('Lỗi tạo lịch: $e'), backgroundColor: Colors.red),
-                        );
-                      }
-                    }
-                  },
-                  child: const Text('Tạo lịch'),
-                ),
-              ],
             );
           },
         );
@@ -236,100 +250,114 @@ class _SessionListScreenState extends State<SessionListScreen> {
         final dialogWidth = screenWidth > 450 ? 400.0 : screenWidth * 0.9;
         return StatefulBuilder(
           builder: (dialogContext, setDialogState) {
-            return AlertDialog(
-              title: Text(isEdit ? 'Chỉnh sửa buổi học' : 'Tạo buổi học mới'),
-              content: SizedBox(
+            return Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: SizedBox(
                 width: dialogWidth,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: maBuoiController,
-                        enabled: !isEdit,
-                        decoration: const InputDecoration(labelText: 'Mã buổi học'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: gioBatDauController,
-                        decoration: const InputDecoration(labelText: 'Giờ bắt đầu'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: gioKetThucController,
-                        decoration: const InputDecoration(labelText: 'Giờ kết thúc'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: diaDiemController,
-                        decoration: const InputDecoration(labelText: 'Địa điểm'),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Ngày: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              final date = await showDatePicker(
-                                context: dialogContext,
-                                initialDate: selectedDate,
-                                firstDate: DateTime(2020),
-                                lastDate: DateTime(2030),
-                              );
-                              if (date != null) {
-                                setDialogState(() => selectedDate = date);
-                              }
-                            },
-                            child: const Text('Chọn ngày'),
-                          ),
-                        ],
-                      ),
-                    ],
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          isEdit ? 'Chỉnh sửa buổi học' : 'Tạo buổi học mới',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: maBuoiController,
+                          enabled: !isEdit,
+                          decoration: const InputDecoration(labelText: 'Mã buổi học'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: gioBatDauController,
+                          decoration: const InputDecoration(labelText: 'Giờ bắt đầu'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: gioKetThucController,
+                          decoration: const InputDecoration(labelText: 'Giờ kết thúc'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: diaDiemController,
+                          decoration: const InputDecoration(labelText: 'Địa điểm'),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Ngày: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                final date = await showDatePicker(
+                                  context: dialogContext,
+                                  initialDate: selectedDate,
+                                  firstDate: DateTime(2020),
+                                  lastDate: DateTime(2030),
+                                );
+                                if (date != null) {
+                                  setDialogState(() => selectedDate = date);
+                                }
+                              },
+                              child: const Text('Chọn ngày'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(dialogContext),
+                              child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () async {
+                                final buoi = BuoiHoc(
+                                  maBuoiHoc: maBuoiController.text.trim(),
+                                  maLop: widget.maLop,
+                                  uidChuLop: _firebase.currentUid ?? '',
+                                  ngayHoc: selectedDate,
+                                  gioBatDau: gioBatDauController.text.trim(),
+                                  gioKetThuc: gioKetThucController.text.trim(),
+                                  diaDiem: diaDiemController.text.trim(),
+                                  viTriLop: session?.viTriLop ?? _defaultLocation,
+                                  trangThai: session?.trangThai ?? 'Sắp diễn ra',
+                                );
+                                try {
+                                  if (isEdit) {
+                                    await _firebase.capNhatBuoiHoc(buoi);
+                                  } else {
+                                    await _firebase.themBuoiHoc(buoi);
+                                  }
+                                  if (dialogContext.mounted) Navigator.pop(dialogContext);
+                                } catch (e) {
+                                  if (dialogContext.mounted) {
+                                    ScaffoldMessenger.of(dialogContext).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Lỗi lưu buổi học: $e'),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                              child: Text(isEdit ? 'Cập nhật' : 'Tạo mới'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final buoi = BuoiHoc(
-                      maBuoiHoc: maBuoiController.text.trim(),
-                      maLop: widget.maLop,
-                      uidChuLop: _firebase.currentUid ?? '',
-                      ngayHoc: selectedDate,
-                      gioBatDau: gioBatDauController.text.trim(),
-                      gioKetThuc: gioKetThucController.text.trim(),
-                      diaDiem: diaDiemController.text.trim(),
-                      viTriLop: session?.viTriLop ?? _defaultLocation,
-                      trangThai: session?.trangThai ?? 'Sắp diễn ra',
-                    );
-                    try {
-                      if (isEdit) {
-                        await _firebase.capNhatBuoiHoc(buoi);
-                      } else {
-                        await _firebase.themBuoiHoc(buoi);
-                      }
-                      if (dialogContext.mounted) Navigator.pop(dialogContext);
-                    } catch (e) {
-                      if (dialogContext.mounted) {
-                        ScaffoldMessenger.of(dialogContext).showSnackBar(
-                          SnackBar(
-                            content: Text('Lỗi lưu buổi học: $e'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: Text(isEdit ? 'Cập nhật' : 'Tạo mới'),
-                ),
-              ],
             );
           },
         );

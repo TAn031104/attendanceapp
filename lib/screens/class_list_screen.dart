@@ -56,104 +56,118 @@ class _ClassListScreenState extends State<ClassListScreen> {
         final dialogWidth = screenWidth > 450 ? 400.0 : screenWidth * 0.9;
         return StatefulBuilder(
           builder: (dialogContext, setStateDialog) {
-            return AlertDialog(
-              title: Text(isEdit ? 'Chỉnh sửa thông tin lớp' : 'Thêm lớp học mới'),
-              content: SizedBox(
+            return Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: SizedBox(
                 width: dialogWidth,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: maLopController,
-                        enabled: !isEdit && !isSaving,
-                        decoration: const InputDecoration(labelText: 'Mã lớp'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: tenLopController,
-                        enabled: !isSaving,
-                        decoration: const InputDecoration(labelText: 'Tên lớp'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: monHocController,
-                        enabled: !isSaving,
-                        decoration: const InputDecoration(labelText: 'Môn học'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: hocPhiController,
-                        enabled: !isSaving,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(labelText: 'Học phí (VND)'),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: siSoController,
-                        enabled: !isSaving,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(labelText: 'Sĩ số tối đa'),
-                      ),
-                    ],
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          isEdit ? 'Chỉnh sửa thông tin lớp' : 'Thêm lớp học mới',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: maLopController,
+                          enabled: !isEdit && !isSaving,
+                          decoration: const InputDecoration(labelText: 'Mã lớp'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: tenLopController,
+                          enabled: !isSaving,
+                          decoration: const InputDecoration(labelText: 'Tên lớp'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: monHocController,
+                          enabled: !isSaving,
+                          decoration: const InputDecoration(labelText: 'Môn học'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: hocPhiController,
+                          enabled: !isSaving,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(labelText: 'Học phí (VND)'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: siSoController,
+                          enabled: !isSaving,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(labelText: 'Sĩ số tối đa'),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: isSaving ? null : () => Navigator.pop(dialogContext),
+                              child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: isSaving
+                                  ? null
+                                  : () async {
+                                      if (maLopController.text.isEmpty ||
+                                          tenLopController.text.isEmpty ||
+                                          monHocController.text.isEmpty) {
+                                        return;
+                                      }
+                                      setStateDialog(() => isSaving = true);
+                                      final lop = LopHoc(
+                                        maLop: maLopController.text.trim(),
+                                        tenLop: tenLopController.text.trim(),
+                                        monHoc: monHocController.text.trim(),
+                                        uidChuLop: _firebase.currentUid ?? '',
+                                        hocPhi: double.tryParse(hocPhiController.text) ?? 0,
+                                        siSoToiDa: int.tryParse(siSoController.text) ?? 20,
+                                        donViHocPhi: 'tháng',
+                                        ngayBatDau: lopHoc?.ngayBatDau ?? DateTime.now(),
+                                        trangThai: lopHoc?.trangThai ?? 'Đang hoạt động',
+                                        ngayTao: lopHoc?.ngayTao ?? DateTime.now(),
+                                      );
+                                      try {
+                                        if (isEdit) {
+                                          await _firebase.capNhatLopHoc(lop);
+                                        } else {
+                                          await _firebase.themLopHoc(lop);
+                                        }
+                                        if (dialogContext.mounted) Navigator.pop(dialogContext);
+                                      } catch (e) {
+                                        setStateDialog(() => isSaving = false);
+                                        if (dialogContext.mounted) {
+                                          ScaffoldMessenger.of(dialogContext).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Lỗi lưu lớp: $e'),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                              child: isSaving
+                                  ? const SizedBox(
+                                      height: 16,
+                                      width: 16,
+                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                    )
+                                  : Text(isEdit ? 'Cập nhật' : 'Thêm mới'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: isSaving ? null : () => Navigator.pop(dialogContext),
-                  child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
-                ),
-                ElevatedButton(
-                  onPressed: isSaving
-                      ? null
-                      : () async {
-                          if (maLopController.text.isEmpty ||
-                              tenLopController.text.isEmpty ||
-                              monHocController.text.isEmpty) {
-                            return;
-                          }
-                          setStateDialog(() => isSaving = true);
-                          final lop = LopHoc(
-                            maLop: maLopController.text.trim(),
-                            tenLop: tenLopController.text.trim(),
-                            monHoc: monHocController.text.trim(),
-                            uidChuLop: _firebase.currentUid ?? '',
-                            hocPhi: double.tryParse(hocPhiController.text) ?? 0,
-                            siSoToiDa: int.tryParse(siSoController.text) ?? 20,
-                            donViHocPhi: 'tháng',
-                            ngayBatDau: lopHoc?.ngayBatDau ?? DateTime.now(),
-                            trangThai: lopHoc?.trangThai ?? 'Đang hoạt động',
-                            ngayTao: lopHoc?.ngayTao ?? DateTime.now(),
-                          );
-                          try {
-                            if (isEdit) {
-                              await _firebase.capNhatLopHoc(lop);
-                            } else {
-                              await _firebase.themLopHoc(lop);
-                            }
-                            if (dialogContext.mounted) Navigator.pop(dialogContext);
-                          } catch (e) {
-                            setStateDialog(() => isSaving = false);
-                            if (dialogContext.mounted) {
-                              ScaffoldMessenger.of(dialogContext).showSnackBar(
-                                SnackBar(
-                                  content: Text('Lỗi lưu lớp: $e'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          }
-                        },
-                  child: isSaving
-                      ? const SizedBox(
-                          height: 16,
-                          width: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(isEdit ? 'Cập nhật' : 'Thêm mới'),
-                ),
-              ],
             );
           },
         );
