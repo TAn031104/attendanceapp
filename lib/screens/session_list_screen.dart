@@ -51,7 +51,8 @@ class _SessionListScreenState extends State<SessionListScreen> {
           builder: (dialogContext, setDialogState) {
             return Dialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              child: Padding(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 400),
                 padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
                   child: Column(
@@ -254,7 +255,8 @@ class _SessionListScreenState extends State<SessionListScreen> {
           builder: (dialogContext, setDialogState) {
             return Dialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              child: Padding(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 400),
                 padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
                   child: Column(
