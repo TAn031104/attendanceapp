@@ -36,6 +36,7 @@ class _NavigationHolderState extends State<NavigationHolder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
